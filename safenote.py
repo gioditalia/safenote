@@ -22,7 +22,7 @@ import argparse
 import safenote
 from PyQt4 import QtGui
 
-parser = argparse.ArgumentParser(description="Text editor for AES128"
+parser = argparse.ArgumentParser(description="Text editor with AES128"
                                  "encryption")
 parser.add_argument("-d", "--debug", help="enable log", action="store_true")
 args = parser.parse_args()

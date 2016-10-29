@@ -20,7 +20,7 @@ import logging
 import ui_mainwindow
 import filehandler
 import AES
-from PyQt4 import QtGui
+from PyQt4 import QtCore, QtGui
 
 logger = logging.getLogger(__name__)
 
@@ -32,9 +32,14 @@ class MainHandler(ui_mainwindow.Ui_MainWindow):
 
     def __setTriggers(self):
         logger.debug("setup triggers...")
+        self.actionNew.triggered.connect(self.new)
         self.actionOpen.triggered.connect(self.open)
         self.actionSave.triggered.connect(self.save)
         self.actionPrint.triggered.connect(self.fprint)
+        self.actionUndo.triggered.connect(self.plainTextEdit.undo)
+        self.actionRedo.triggered.connect(self.plainTextEdit.redo)
+        self.actionFind.triggered.connect(self.find)
+        self.actionFind_next.triggered.connect(self.find_next)
         self.actionEncrypt.triggered.connect(self.encrypt)
         self.actionDecrypt.triggered.connect(self.decrypt)
         self.actionOnline_help.triggered.connect(self.online)
@@ -46,13 +51,29 @@ class MainHandler(ui_mainwindow.Ui_MainWindow):
         self.__setTriggers()
         self.MainWindow = MainWindow
 
+    def new(self):
+        if self.plainTextEdit.toPlainText() != "":
+            ans = QtGui.QMessageBox.question(self.MainWindow, "Message",
+                                             "You will lose any unsaved "
+                                             "changes, ok?",
+                                             QtGui.QMessageBox.Yes |
+                                             QtGui.QMessageBox.No,
+                                             QtGui.QMessageBox.Yes)
+            if ans == QtGui.QMessageBox.Yes:
+                self.plainTextEdit.clear()
+                return True
+            else:
+                return False
+        return True
+
     def open(self):
-        fname = QtGui.QFileDialog.getOpenFileName(self.MainWindow, 'Open file',
+        fname = QtGui.QFileDialog.getOpenFileName(self.MainWindow, "Open file",
                                                   "",
                                                   "All files "
                                                   "(*.*)")
         fname = str(fname)
         if fname is not "":
+            if self.new():
                 try:
                     filehandler.FileHandler(fname).open(self.plainTextEdit)
 
@@ -67,7 +88,7 @@ class MainHandler(ui_mainwindow.Ui_MainWindow):
 
     def save(self):
         fname = QtGui.QFileDialog.getSaveFileName(self.MainWindow,
-                                                  'Save file',
+                                                  "Save file",
                                                   "",
                                                   "All files "
                                                   "(*.*)")
@@ -93,9 +114,40 @@ class MainHandler(ui_mainwindow.Ui_MainWindow):
             self.plainTextEdit.document().print_(dialog.printer())
             logger.debug("Printing...")
 
+    def find(self):
+        self.text, ok = QtGui.QInputDialog.getText(self.MainWindow, "Search",
+                                                   "Search:")
+        if ok:
+            self.findFlag = False
+            self.find_next()
+
+    def find_next(self):
+        if not self.plainTextEdit.find(self.text):
+            logger.debug("Not found any other occurence for '%s'"
+                         % (self.text))
+            if self.findFlag is False:
+                logger.debug("Set cursor position on start")
+                cursor = self.plainTextEdit.textCursor()
+                cursor.setPosition(0)
+                self.plainTextEdit.setTextCursor(cursor)
+                self.findFlag = True
+                self.find_next()
+            else:
+                QtGui.QMessageBox.information(self.MainWindow, "Message",
+                                              "No result found for '%s'"
+                                              % (self.text))
+        else:
+            logger.debug("Found '%s' in position %d" %
+                         (self.text,
+                          (self.plainTextEdit.textCursor().position() -
+                           len(self.text))
+                          )
+                         )
+            self.findFlag = False
+
     def encrypt(self):
-        password, ok = QtGui.QInputDialog.getText(self.MainWindow, 'CryptoPY',
-                                                  'Password:',
+        password, ok = QtGui.QInputDialog.getText(self.MainWindow, "Encrypt",
+                                                  "Password:",
                                                   QtGui.QLineEdit.
                                                   Password)
         if ok:
@@ -108,17 +160,17 @@ class MainHandler(ui_mainwindow.Ui_MainWindow):
 
             except UnicodeError as error:
                 logger.error(error)
-                QtGui.QMessageBox.critical(self.MainWindow, 'Message',
+                QtGui.QMessageBox.critical(self.MainWindow, "Message",
                                            "I can encrypt only ascii"
                                            " characters")
             except Exception as error:
                 logger.error(error)
-                QtGui.QMessageBox.critical(self.MainWindow, 'Message',
+                QtGui.QMessageBox.critical(self.MainWindow, "Message",
                                            str(error))
 
     def decrypt(self):
-        password, ok = QtGui.QInputDialog.getText(self.MainWindow, 'CryptoPY',
-                                                  'Password:',
+        password, ok = QtGui.QInputDialog.getText(self.MainWindow, "Decrypt",
+                                                  "Password:",
                                                   QtGui.QLineEdit.
                                                   Password)
         if ok:
@@ -131,13 +183,13 @@ class MainHandler(ui_mainwindow.Ui_MainWindow):
 
             except UnicodeError as error:
                 logger.error(error)
-                QtGui.QMessageBox.critical(self.MainWindow, 'Message',
+                QtGui.QMessageBox.critical(self.MainWindow, "Message",
                                            "Wrong password!")
                 self.decrypt()
 
             except Exception as error:
                 logger.error(error)
-                QtGui.QMessageBox.critical(self.MainWindow, 'Message',
+                QtGui.QMessageBox.critical(self.MainWindow, "Message",
                                            str(error))
 
     def online(self):

@@ -15,8 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-
-# Form implementation generated from reading ui file 'mainwindow.ui'
+# Form implementation generated from reading ui file 'forms/mainwindow.ui'
 #
 # Created by: PyQt4 UI code generator 4.11.4
 #
@@ -73,6 +72,8 @@ class Ui_MainWindow(object):
         self.menuSecurity.setObjectName(_fromUtf8("menuSecurity"))
         self.menuAbout = QtGui.QMenu(self.menubar)
         self.menuAbout.setObjectName(_fromUtf8("menuAbout"))
+        self.menuEdit = QtGui.QMenu(self.menubar)
+        self.menuEdit.setObjectName(_fromUtf8("menuEdit"))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtGui.QStatusBar(MainWindow)
         self.statusbar.setObjectName(_fromUtf8("statusbar"))
@@ -91,6 +92,17 @@ class Ui_MainWindow(object):
         self.actionEncrypt.setObjectName(_fromUtf8("actionEncrypt"))
         self.actionDecrypt = QtGui.QAction(MainWindow)
         self.actionDecrypt.setObjectName(_fromUtf8("actionDecrypt"))
+        self.actionNew = QtGui.QAction(MainWindow)
+        self.actionNew.setObjectName(_fromUtf8("actionNew"))
+        self.actionFind = QtGui.QAction(MainWindow)
+        self.actionFind.setObjectName(_fromUtf8("actionFind"))
+        self.actionFind_next = QtGui.QAction(MainWindow)
+        self.actionFind_next.setObjectName(_fromUtf8("actionFind_next"))
+        self.actionUndo = QtGui.QAction(MainWindow)
+        self.actionUndo.setObjectName(_fromUtf8("actionUndo"))
+        self.actionRedo = QtGui.QAction(MainWindow)
+        self.actionRedo.setObjectName(_fromUtf8("actionRedo"))
+        self.menuFile.addAction(self.actionNew)
         self.menuFile.addAction(self.actionOpen)
         self.menuFile.addAction(self.actionSave)
         self.menuFile.addSeparator()
@@ -99,7 +111,13 @@ class Ui_MainWindow(object):
         self.menuSecurity.addAction(self.actionDecrypt)
         self.menuAbout.addAction(self.actionOnline_help)
         self.menuAbout.addAction(self.actionAbout)
+        self.menuEdit.addAction(self.actionUndo)
+        self.menuEdit.addAction(self.actionRedo)
+        self.menuEdit.addSeparator()
+        self.menuEdit.addAction(self.actionFind)
+        self.menuEdit.addAction(self.actionFind_next)
         self.menubar.addAction(self.menuFile.menuAction())
+        self.menubar.addAction(self.menuEdit.menuAction())
         self.menubar.addAction(self.menuSecurity.menuAction())
         self.menubar.addAction(self.menuAbout.menuAction())
 
@@ -111,11 +129,34 @@ class Ui_MainWindow(object):
         self.menuFile.setTitle(_translate("MainWindow", "File", None))
         self.menuSecurity.setTitle(_translate("MainWindow", "Security", None))
         self.menuAbout.setTitle(_translate("MainWindow", "Help", None))
+        self.menuEdit.setTitle(_translate("MainWindow", "Edit", None))
         self.actionOpen.setText(_translate("MainWindow", "Open", None))
+        self.actionOpen.setShortcut(_translate("MainWindow", "Ctrl+O", None))
         self.actionSave.setText(_translate("MainWindow", "Save", None))
+        self.actionSave.setShortcut(_translate("MainWindow", "Ctrl+S", None))
         self.actionPrint.setText(_translate("MainWindow", "Print", None))
-        self.actionOnline_help.setText(_translate("MainWindow", "Online help",
-                                       None))
+        self.actionPrint.setShortcut(_translate("MainWindow", "Ctrl+P", None))
+        self.actionOnline_help.setText(_translate("MainWindow",
+                                       "Online help", None))
+        self.actionOnline_help.setShortcut(_translate("MainWindow",
+                                           "F1", None))
         self.actionAbout.setText(_translate("MainWindow", "About", None))
         self.actionEncrypt.setText(_translate("MainWindow", "Encrypt", None))
+        self.actionEncrypt.setShortcut(_translate("MainWindow",
+                                       "Ctrl+E", None))
         self.actionDecrypt.setText(_translate("MainWindow", "Decrypt", None))
+        self.actionDecrypt.setShortcut(_translate("MainWindow",
+                                       "Ctrl+D", None))
+        self.actionNew.setText(_translate("MainWindow", "New", None))
+        self.actionNew.setShortcut(_translate("MainWindow", "Ctrl+N", None))
+        self.actionFind.setText(_translate("MainWindow", "Find", None))
+        self.actionFind.setShortcut(_translate("MainWindow", "Ctrl+F", None))
+        self.actionFind_next.setText(_translate("MainWindow",
+                                     "Find next", None))
+        self.actionFind_next.setShortcut(_translate("MainWindow",
+                                         "Ctrl+Shift+F", None))
+        self.actionUndo.setText(_translate("MainWindow", "Undo", None))
+        self.actionUndo.setShortcut(_translate("MainWindow", "Ctrl+Z", None))
+        self.actionRedo.setText(_translate("MainWindow", "Redo", None))
+        self.actionRedo.setShortcut(_translate("MainWindow",
+                                    "Ctrl+Shift+Z", None))
