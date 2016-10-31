@@ -18,6 +18,7 @@
 import webbrowser
 import logging
 import ui_mainwindow
+import ui_about
 import filehandler
 import AES
 from PyQt4 import QtCore, QtGui
@@ -45,11 +46,14 @@ class MainHandler(ui_mainwindow.Ui_MainWindow):
         self.actionOnline_help.triggered.connect(self.online)
         self.actionAbout.triggered.connect(self.about)
 
-    def setupUi(self, MainWindow):
+    def setupUi(self, windows):
         logger.debug("setup MainHandler...")
-        super(self.__class__, self).setupUi(MainWindow)
+        super(self.__class__, self).setupUi(windows[0])
         self.__setTriggers()
-        self.MainWindow = MainWindow
+        self.MainWindow = windows[0]
+        # setup other UI
+        self.About = windows[1]
+        ui_about.Ui_About().setupUi(self.About)
 
     def new(self):
         if self.plainTextEdit.toPlainText() != "":
@@ -196,4 +200,5 @@ class MainHandler(ui_mainwindow.Ui_MainWindow):
         webbrowser.open("http://gioditalia.github.io/safenote")
 
     def about(self):
-        logger.warning("not implemented")
+        logger.debug("showing about...")
+        self.About.show()

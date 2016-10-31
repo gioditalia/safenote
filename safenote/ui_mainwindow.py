@@ -1,20 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-    safenote.
-    Copyright (C) 2016  Giovanni D'Italia
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-"""
 # Form implementation generated from reading ui file 'forms/mainwindow.ui'
 #
 # Created by: PyQt4 UI code generator 4.11.4
@@ -31,13 +16,11 @@ except AttributeError:
 
 try:
     _encoding = QtGui.QApplication.UnicodeUTF8
-
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig, _encoding)
 except AttributeError:
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
-
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -125,7 +108,7 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
+        MainWindow.setWindowTitle(_translate("MainWindow", "safenote", None))
         self.menuFile.setTitle(_translate("MainWindow", "File", None))
         self.menuSecurity.setTitle(_translate("MainWindow", "Security", None))
         self.menuAbout.setTitle(_translate("MainWindow", "Help", None))
@@ -136,27 +119,21 @@ class Ui_MainWindow(object):
         self.actionSave.setShortcut(_translate("MainWindow", "Ctrl+S", None))
         self.actionPrint.setText(_translate("MainWindow", "Print", None))
         self.actionPrint.setShortcut(_translate("MainWindow", "Ctrl+P", None))
-        self.actionOnline_help.setText(_translate("MainWindow",
-                                       "Online help", None))
-        self.actionOnline_help.setShortcut(_translate("MainWindow",
-                                           "F1", None))
+        self.actionOnline_help.setText(_translate("MainWindow", "Online help", None))
+        self.actionOnline_help.setShortcut(_translate("MainWindow", "F1", None))
         self.actionAbout.setText(_translate("MainWindow", "About", None))
         self.actionEncrypt.setText(_translate("MainWindow", "Encrypt", None))
-        self.actionEncrypt.setShortcut(_translate("MainWindow",
-                                       "Ctrl+E", None))
+        self.actionEncrypt.setShortcut(_translate("MainWindow", "Ctrl+E", None))
         self.actionDecrypt.setText(_translate("MainWindow", "Decrypt", None))
-        self.actionDecrypt.setShortcut(_translate("MainWindow",
-                                       "Ctrl+D", None))
+        self.actionDecrypt.setShortcut(_translate("MainWindow", "Ctrl+D", None))
         self.actionNew.setText(_translate("MainWindow", "New", None))
         self.actionNew.setShortcut(_translate("MainWindow", "Ctrl+N", None))
         self.actionFind.setText(_translate("MainWindow", "Find", None))
         self.actionFind.setShortcut(_translate("MainWindow", "Ctrl+F", None))
-        self.actionFind_next.setText(_translate("MainWindow",
-                                     "Find next", None))
-        self.actionFind_next.setShortcut(_translate("MainWindow",
-                                         "Ctrl+Shift+F", None))
+        self.actionFind_next.setText(_translate("MainWindow", "Find next", None))
+        self.actionFind_next.setShortcut(_translate("MainWindow", "Ctrl+Shift+F", None))
         self.actionUndo.setText(_translate("MainWindow", "Undo", None))
         self.actionUndo.setShortcut(_translate("MainWindow", "Ctrl+Z", None))
         self.actionRedo.setText(_translate("MainWindow", "Redo", None))
-        self.actionRedo.setShortcut(_translate("MainWindow",
-                                    "Ctrl+Shift+Z", None))
+        self.actionRedo.setShortcut(_translate("MainWindow", "Ctrl+Shift+Z", None))
+

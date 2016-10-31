@@ -39,13 +39,15 @@ class SafeNote:
         try:
             app = QtGui.QApplication(sys.argv)
             logger.debug("start application...")
+
             MainWindow = QtGui.QMainWindow()
+            About = QtGui.QWidget()
 
             ui = mainhandler.MainHandler()
-            ui.setupUi(MainWindow)
+            ui.setupUi([MainWindow, About])
 
             MainWindow.show()
             sys.exit(app.exec_())
 
         except Exception as error:
-            logger.critical("error")
+            logger.critical(error)
