@@ -26,6 +26,9 @@ class Ui_About(object):
     def setupUi(self, About):
         About.setObjectName(_fromUtf8("About"))
         About.resize(419, 328)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(_fromUtf8("images/icons/safenote.ico")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        About.setWindowIcon(icon)
         self.gridLayout = QtGui.QGridLayout(About)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
         self.verticalLayout_4 = QtGui.QVBoxLayout()

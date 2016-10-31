@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'forms/mainwindow.ui'
+# Form implementation generated from reading ui file '../forms/mainwindow.ui'
 #
 # Created by: PyQt4 UI code generator 4.11.4
 #
@@ -26,6 +26,9 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
         MainWindow.resize(800, 600)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(_fromUtf8("images/icons/safenote.ico")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        MainWindow.setWindowIcon(icon)
         self.centralwidget = QtGui.QWidget(MainWindow)
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Liberation Sans"))
@@ -136,4 +139,3 @@ class Ui_MainWindow(object):
         self.actionUndo.setShortcut(_translate("MainWindow", "Ctrl+Z", None))
         self.actionRedo.setText(_translate("MainWindow", "Redo", None))
         self.actionRedo.setShortcut(_translate("MainWindow", "Ctrl+Shift+Z", None))
-

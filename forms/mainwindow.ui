@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>safenote</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../images/icons/safenote.ico</normaloff>../images/icons/safenote.ico</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <property name="font">
     <font>
