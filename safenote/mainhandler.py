@@ -71,15 +71,26 @@ class MainHandler(ui_mainwindow.Ui_MainWindow):
         return True
 
     def open(self):
-        fname = QtGui.QFileDialog.getOpenFileName(self.MainWindow, "Open file",
-                                                  "",
-                                                  "All files "
-                                                  "(*.*)")
+        fname, filt = QtGui.QFileDialog.getOpenFileNameAndFilter(self.
+                                                                 MainWindow,
+                                                                 "Open file",
+                                                                 "",
+                                                                 "Text file"
+                                                                 " (*.txt);;"
+                                                                 "PDF (*.pdf)"
+                                                                 ";;PDF with "
+                                                                 "safenote "
+                                                                 "encryption "
+                                                                 "(*.pdf)"
+                                                                 ";;All files "
+                                                                 "(*.*)")
         fname = str(fname)
+        logger.debug("Selected %s filter" % (filt))
         if fname is not "":
             if self.new():
                 try:
                     fh = filehandler.FileHandler(fname)
+                    fh.setOpenMode(filt)
                     fh.open(self.plainTextEdit)
 
                 except UnicodeError:

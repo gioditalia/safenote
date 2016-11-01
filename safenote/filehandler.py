@@ -33,28 +33,38 @@ class FileHandler:
 
     def __init__(self, fname):
         self.fname = fname
+        self.encryption = False
 
     def setFileExtention(self, filt):
-        #try:
+        if filt == "PDF (*.pdf)":
+            if not self.fname.endswith("pdf"):
+                self.fname += ".pdf"
+        elif filt == "Text file (*.txt)":
+            if not self.fname.endswith("txt"):
+                self.fname += ".txt"
+        elif filt == "All files (*.*)":
+            pass
+        else:
+            raise ValueError("Extention not available")
 
-            if filt == "PDF (*.pdf)":
-                if not self.fname.endswith("pdf"):
-                    self.fname += ".pdf"
-            elif filt == "Text file (*.txt)":
-                if not self.fname.endswith("txt"):
-                    self.fname += ".txt"
-            elif filt == "All files (*.*)":
-                pass
-            else:
-                raise ValueError("Extention not available")
-        #except:
-        #    raise Exception
+    def setOpenMode(self, filt):
+        if filt == "PDF (*.pdf)":
+            pass
+        elif filt == "PDF with safenote encryption (*.pdf)":
+            self.encryption = True
+        elif filt == "Text file (*.txt)":
+            pass
+        elif filt == "All files (*.*)":
+            pass
+        else:
+            raise ValueError("Extention not available")
 
     def open(self, textEdit):
         try:
             rfile = open(self.fname, "r")
             if self.fname.endswith("pdf") or self.fname.endswith("PDF"):
-                textEdit.setPlainText(self.__convert(self.fname)
+                textEdit.setPlainText(self.__convert(self.fname,
+                                                     self.encryption)
                                       .encode("utf-8"))
             else:
                 textEdit.setPlainText(rfile.read().encode("utf-8"))
@@ -75,7 +85,6 @@ class FileHandler:
                 printer = QtGui.QPrinter()
                 printer.setOutputFileName(self.fname)
                 printer.setOutputFormat(QtGui.QPrinter.PdfFormat)
-                printer.setFullPage(False)
                 textEdit.print_(printer)
             else:
                 logger.debug("Saving as text file")
@@ -93,12 +102,8 @@ class FileHandler:
             logger.error("Cannot write %s - %s" % (self.fname, error))
             raise
 
-    def __convert(self, fname, pages=None):
-        if not pages:
-            pagenums = set()
-        else:
-            pagenums = set(pages)
-
+    def __convert(self, fname, encryption=False):
+        pagenums = set()
         output = StringIO()
         manager = PDFResourceManager()
         converter = TextConverter(manager, output, laparams=LAParams())
@@ -111,20 +116,24 @@ class FileHandler:
         converter.close()
         text = output.getvalue()
         output.close
-        text = text.split("\n")
-        result = ""
-        string_old = " "
-        for string in text:
-            string = string.strip("\n")  # delete \n
-            logger.debug("Checking: %s" % (string))
-            logger.debug("This \"%s\" not in  \"%s\" ?" % (string_old, string))
-            if string_old not in string:
-                logger.debug("True ✓")
-            logger.debug("%d > 5 ?" % len(string))
-            if len(string) > 5:
-                logger.debug("True ✓")
-            if len(string) > 5 and string_old not in string:
-                logger.debug("Insert string")
-                string_old = string
-                result += string
-        return result.strip("\n")
+        if encryption is True:
+            text = text.split("\n")
+            result = ""
+            string_old = " "
+            for string in text:
+                string = string.strip("\n")  # delete \n
+                logger.debug("Checking: %s" % (string))
+                logger.debug("This \"%s\" not in  \"%s\" ?"
+                             % (string_old, string))
+                if string_old not in string:
+                    logger.debug("True ✓")
+                logger.debug("%d > 5 ?" % len(string))
+                if len(string) > 5:
+                    logger.debug("True ✓")
+                if len(string) > 5 and string_old not in string:
+                    logger.debug("Insert string")
+                    string_old = string
+                    result += string
+            return result.strip("\n")
+        else:
+            return text
