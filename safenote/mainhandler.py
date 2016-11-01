@@ -79,7 +79,8 @@ class MainHandler(ui_mainwindow.Ui_MainWindow):
         if fname is not "":
             if self.new():
                 try:
-                    filehandler.FileHandler(fname).open(self.plainTextEdit)
+                    fh = filehandler.FileHandler(fname)
+                    fh.open(self.plainTextEdit)
 
                 except UnicodeError:
                     QtGui.QMessageBox.critical(self.MainWindow, "Message",
@@ -91,15 +92,22 @@ class MainHandler(ui_mainwindow.Ui_MainWindow):
                                                "Cannot open this file")
 
     def save(self):
-        fname = QtGui.QFileDialog.getSaveFileName(self.MainWindow,
-                                                  "Save file",
-                                                  "",
-                                                  "All files "
-                                                  "(*.*)")
+        fname, filt = QtGui.QFileDialog.getSaveFileNameAndFilter(self.
+                                                                 MainWindow,
+                                                                 "Save file",
+                                                                 "",
+                                                                 "Text file"
+                                                                 " (*.txt);;"
+                                                                 "PDF (*.pdf)"
+                                                                 ";;All files "
+                                                                 "(*.*)")
         fname = str(fname)
+        logger.debug("Selected %s filter" % (filt))
         if fname is not "":
             try:
-                filehandler.FileHandler(fname).save(self.plainTextEdit)
+                fh = filehandler.FileHandler(fname)
+                fh.setFileExtention(filt)
+                fh.save(self.plainTextEdit)
 
             except UnicodeError:
                 QtGui.QMessageBox.critical(self.MainWindow, "Message",
