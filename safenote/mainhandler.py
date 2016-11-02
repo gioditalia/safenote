@@ -34,15 +34,13 @@ class MainHandler(ui_mainwindow.Ui_MainWindow):
     def __setTriggers(self):
         logger.debug("setup triggers...")
         self.actionNew.triggered.connect(self.new)
-        self.actionOpen.triggered.connect(self.open)
-        self.actionSave.triggered.connect(self.save)
+        self.actionEncrypt_and_Save.triggered.connect(self.encryptAndSave)
+        self.actionOpen_and_Decrypt.triggered.connect(self.openAndDecrypt)
         self.actionPrint.triggered.connect(self.fprint)
         self.actionUndo.triggered.connect(self.plainTextEdit.undo)
         self.actionRedo.triggered.connect(self.plainTextEdit.redo)
         self.actionFind.triggered.connect(self.find)
         self.actionFind_next.triggered.connect(self.find_next)
-        self.actionEncrypt.triggered.connect(self.encrypt)
-        self.actionDecrypt.triggered.connect(self.decrypt)
         self.actionOnline_help.triggered.connect(self.online)
         self.actionAbout.triggered.connect(self.about)
 
@@ -70,12 +68,20 @@ class MainHandler(ui_mainwindow.Ui_MainWindow):
                 return False
         return True
 
-    def open(self):
+    def encryptAndSave(self):
+        self.__encrypt()
+        self.__save()
+
+    def openAndDecrypt(self):
+        self.__open()
+        self.__decrypt()
+
+    def __open(self):
         fname = QtGui.QFileDialog.getOpenFileName(self.MainWindow,
                                                   "Open file",
                                                   "",
-                                                  "All files "
-                                                  "(*.*)")
+                                                  "safe files "
+                                                  "(*.safe)")
         fname = str(fname)
         if fname is not "":
             if self.new():
@@ -92,14 +98,16 @@ class MainHandler(ui_mainwindow.Ui_MainWindow):
                     QtGui.QMessageBox.critical(self.MainWindow, "Message",
                                                "Cannot open this file")
 
-    def save(self):
+    def __save(self):
         fname = QtGui.QFileDialog.getSaveFileName(self.MainWindow,
                                                   "Save file",
                                                   "",
-                                                  "All files "
-                                                  "(*.*)")
+                                                  "safe files "
+                                                  "(*.safe)")
         fname = str(fname)
         if fname is not "":
+            if not fname.endswith(".safe"):
+                fname += ".safe"
             try:
                 fh = filehandler.FileHandler(fname)
                 fh.save(self.plainTextEdit)
@@ -152,7 +160,7 @@ class MainHandler(ui_mainwindow.Ui_MainWindow):
                          )
             self.findFlag = False
 
-    def encrypt(self):
+    def __encrypt(self):
         password, ok = QtGui.QInputDialog.getText(self.MainWindow, "Encrypt",
                                                   "Password:",
                                                   QtGui.QLineEdit.
@@ -175,7 +183,7 @@ class MainHandler(ui_mainwindow.Ui_MainWindow):
                 QtGui.QMessageBox.critical(self.MainWindow, "Message",
                                            str(error))
 
-    def decrypt(self):
+    def __decrypt(self):
         password, ok = QtGui.QInputDialog.getText(self.MainWindow, "Decrypt",
                                                   "Password:",
                                                   QtGui.QLineEdit.
