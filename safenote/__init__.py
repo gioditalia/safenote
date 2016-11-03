@@ -33,6 +33,8 @@ class SafeNote:
 
         if args.debug:
             logging.basicConfig(level=logging.DEBUG)
+        else:
+            logging.basicConfig(level=logging.CRITICAL)
 
         logger = logging.getLogger(__name__)
 

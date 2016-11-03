@@ -44,6 +44,55 @@ class MainHandler(ui_mainwindow.Ui_MainWindow):
         self.actionOnline_help.triggered.connect(self.online)
         self.actionAbout.triggered.connect(self.about)
 
+    def __encrypt(self):
+        password, ok = QtGui.QInputDialog.getText(self.MainWindow, "Encrypt",
+                                                  "Password:",
+                                                  QtGui.QLineEdit.
+                                                  Password)
+        if ok:
+            try:
+                AES_machine = AES.AESCipher(password)
+                # encrypt
+                ciphertext = AES_machine.encrypt(self.plainTextEdit.
+                                                 toPlainText())
+                self.plainTextEdit.setPlainText(ciphertext.encode("utf-8"))
+                return True
+            except UnicodeError as error:
+                logger.error(error)
+                QtGui.QMessageBox.critical(self.MainWindow, "Message",
+                                           "I can encrypt only ascii"
+                                           " characters")
+            except Exception as error:
+                logger.error(error)
+                QtGui.QMessageBox.critical(self.MainWindow, "Message",
+                                           str(error))
+        return False
+
+    def __decrypt(self):
+        password, ok = QtGui.QInputDialog.getText(self.MainWindow, "Decrypt",
+                                                  "Password:",
+                                                  QtGui.QLineEdit.
+                                                  Password)
+        if ok:
+            try:
+                AES_machine = AES.AESCipher(password)
+                # decrypt
+                plainText = AES_machine.decrypt(self.plainTextEdit.
+                                                toPlainText())
+                self.plainTextEdit.setPlainText(plainText.encode("utf-8"))
+                return True
+            except UnicodeError as error:
+                logger.error(error)
+                QtGui.QMessageBox.critical(self.MainWindow, "Message",
+                                           "Wrong password!")
+                self.decrypt()
+
+            except Exception as error:
+                logger.error(error)
+                QtGui.QMessageBox.critical(self.MainWindow, "Message",
+                                           str(error))
+        return False
+
     def setupUi(self, windows):
         logger.debug("setup MainHandler...")
         super(self.__class__, self).setupUi(windows[0])
@@ -68,14 +117,6 @@ class MainHandler(ui_mainwindow.Ui_MainWindow):
                 return False
         return True
 
-    def encryptAndSave(self):
-        self.__encrypt()
-        self.__save()
-
-    def openAndDecrypt(self):
-        self.__open()
-        self.__decrypt()
-
     def __open(self):
         fname = QtGui.QFileDialog.getOpenFileName(self.MainWindow,
                                                   "Open file",
@@ -88,7 +129,7 @@ class MainHandler(ui_mainwindow.Ui_MainWindow):
                 try:
                     fh = filehandler.FileHandler(fname)
                     fh.open(self.plainTextEdit)
-
+                    return True
                 except UnicodeError:
                     QtGui.QMessageBox.critical(self.MainWindow, "Message",
                                                "Cannot open this kind of"
@@ -97,6 +138,7 @@ class MainHandler(ui_mainwindow.Ui_MainWindow):
                 except IOError:
                     QtGui.QMessageBox.critical(self.MainWindow, "Message",
                                                "Cannot open this file")
+        return False
 
     def __save(self):
         fname = QtGui.QFileDialog.getSaveFileName(self.MainWindow,
@@ -111,7 +153,7 @@ class MainHandler(ui_mainwindow.Ui_MainWindow):
             try:
                 fh = filehandler.FileHandler(fname)
                 fh.save(self.plainTextEdit)
-
+                return True
             except UnicodeError:
                 QtGui.QMessageBox.critical(self.MainWindow, "Message",
                                            "Cannot save this file, use only"
@@ -120,6 +162,15 @@ class MainHandler(ui_mainwindow.Ui_MainWindow):
             except IOError:
                 QtGui.QMessageBox.critical(self.MainWindow, "Message",
                                            "Cannot write this file")
+        return False
+
+    def encryptAndSave(self):
+        if self.__encrypt():
+            self.__save()
+
+    def openAndDecrypt(self):
+        if self.__open():
+            self.__decrypt()
 
     def fprint(self):
         # Open printing dialog
@@ -159,53 +210,6 @@ class MainHandler(ui_mainwindow.Ui_MainWindow):
                           )
                          )
             self.findFlag = False
-
-    def __encrypt(self):
-        password, ok = QtGui.QInputDialog.getText(self.MainWindow, "Encrypt",
-                                                  "Password:",
-                                                  QtGui.QLineEdit.
-                                                  Password)
-        if ok:
-            try:
-                AES_machine = AES.AESCipher(password)
-                # encrypt
-                ciphertext = AES_machine.encrypt(self.plainTextEdit.
-                                                 toPlainText())
-                self.plainTextEdit.setPlainText(ciphertext.encode("utf-8"))
-
-            except UnicodeError as error:
-                logger.error(error)
-                QtGui.QMessageBox.critical(self.MainWindow, "Message",
-                                           "I can encrypt only ascii"
-                                           " characters")
-            except Exception as error:
-                logger.error(error)
-                QtGui.QMessageBox.critical(self.MainWindow, "Message",
-                                           str(error))
-
-    def __decrypt(self):
-        password, ok = QtGui.QInputDialog.getText(self.MainWindow, "Decrypt",
-                                                  "Password:",
-                                                  QtGui.QLineEdit.
-                                                  Password)
-        if ok:
-            try:
-                AES_machine = AES.AESCipher(password)
-                # decrypt
-                plainText = AES_machine.decrypt(self.plainTextEdit.
-                                                toPlainText())
-                self.plainTextEdit.setPlainText(plainText.encode("utf-8"))
-
-            except UnicodeError as error:
-                logger.error(error)
-                QtGui.QMessageBox.critical(self.MainWindow, "Message",
-                                           "Wrong password!")
-                self.decrypt()
-
-            except Exception as error:
-                logger.error(error)
-                QtGui.QMessageBox.critical(self.MainWindow, "Message",
-                                           str(error))
 
     def online(self):
         webbrowser.open("http://gioditalia.github.io/safenote")
